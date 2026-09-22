@@ -6,26 +6,12 @@
     <title>قرآن مجید - تلاوت</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/style.css">
     <style>
-        .ayah-text {
-            font-family: 'Scheherazade New', 'Amiri', 'Traditional Arabic', serif;
-        }
-        .loading {
-            text-align: center;
-            font-size: 1.2rem;
-            margin: 20px 0;
-            color: #d4af37;
-        }
-        .surah-details {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 8px;
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
+        .ayah-text { font-family: 'Scheherazade New', 'Amiri', serif; }
+        .loading { text-align: center; font-size: 1.2rem; margin: 20px 0; color: #d4af37; }
+        .surah-details { display: flex; justify-content: center; gap: 15px; margin-top: 8px; font-size: 0.95rem; opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -36,19 +22,17 @@
     </header>
 
     <main>
-        <!-- Surah select karne ke liye dropdown -->
         <div class="surah-form">
             <select id="surahSelect" onchange="onSurahChange()">
                 <option value="">-- سورت منتخب کریں (لوڈ ہو رہا ہے...) --</option>
             </select>
         </div>
 
-        <div id="loadingIndicator" class="loading" style="display: none;">
+        <div id="loadingIndicator" class="loading" style="display:none;">
             ⏳ لوڈ کیا جا رہا ہے، براہ کرم انتظار کریں...
         </div>
 
-        <!-- Surah Details & Audio Container -->
-        <div id="surahContainer" style="display: none;">
+        <div id="surahContainer" style="display:none;">
             <section class="surah-info">
                 <h2 id="surahTitle"></h2>
                 <p id="surahSubTitle"></p>
@@ -59,7 +43,6 @@
                 </div>
             </section>
 
-            <!-- Poori surah ek sath sunne ke liye -->
             <div class="full-audio">
                 <h3>🔊 پوری سورت سنیں</h3>
                 <audio id="fullAudioPlayer" controls style="width:100%">
@@ -68,7 +51,6 @@
                 </audio>
             </div>
 
-            <!-- Har ayah ka alag audio player -->
             <div class="ayah-list" id="ayahList"></div>
         </div>
 
@@ -87,57 +69,45 @@
         const surahContainer = document.getElementById("surahContainer");
         const defaultHint = document.getElementById("defaultHint");
 
-        // Load all 114 Surahs into dropdown on page load
         async function loadSurahList() {
             try {
-                const response = await fetch(`${BASE_URL}/surah`);
-                const data = await response.json();
-                const surahs = data.data;
-
+                const data = await fetch(`${BASE_URL}/surah`).then(r => r.json());
                 surahSelect.innerHTML = '<option value="">-- سورت منتخب کریں --</option>';
-                surahs.forEach(s => {
+                data.data.forEach(s => {
                     const opt = document.createElement("option");
                     opt.value = s.number;
                     opt.textContent = `${s.number}. ${s.name} (${s.englishName})`;
                     surahSelect.appendChild(opt);
                 });
 
-                // Check if URL has ?surah=X
-                const urlParams = new URLSearchParams(window.location.search);
-                const requestedSurah = urlParams.get('surah');
-                if (requestedSurah) {
-                    surahSelect.value = requestedSurah;
-                    fetchSurahData(requestedSurah);
+                const surahParam = new URLSearchParams(window.location.search).get('surah');
+                if (surahParam) {
+                    surahSelect.value = surahParam;
+                    fetchSurahData(surahParam);
                 }
             } catch (err) {
-                console.error("Surah list error:", err);
                 surahSelect.innerHTML = '<option value="">لسٹ لوڈ کرنے میں مسئلہ ہوا، پیج ریفریش کریں</option>';
             }
         }
 
-        async function onSurahChange() {
-            const surahNumber = surahSelect.value;
-            if (!surahNumber) {
+        function onSurahChange() {
+            const num = surahSelect.value;
+            if (!num) {
                 surahContainer.style.display = "none";
                 defaultHint.style.display = "block";
                 return;
             }
-            fetchSurahData(surahNumber);
+            fetchSurahData(num);
         }
 
         async function fetchSurahData(surahNumber) {
             loadingIndicator.style.display = "block";
             surahContainer.style.display = "none";
             defaultHint.style.display = "none";
-
             try {
-                const res = await fetch(`${BASE_URL}/surah/${surahNumber}/${RECITER}`);
-                const data = await res.json();
-                const surahData = data.data;
-
-                renderSurah(surahData);
+                const data = await fetch(`${BASE_URL}/surah/${surahNumber}/${RECITER}`).then(r => r.json());
+                renderSurah(data.data);
             } catch (err) {
-                console.error("Surah data error:", err);
                 alert("سورت کا ڈیٹا حاصل کرنے میں مسئلہ ہوا۔ براہ کرم انٹرنیٹ کنکشن چیک کریں۔");
             } finally {
                 loadingIndicator.style.display = "none";
@@ -150,20 +120,15 @@
             document.getElementById("surahAyahsCount").textContent = `کل آیات: ${surah.numberOfAyahs}`;
             document.getElementById("surahRevelation").textContent = `نزول: ${surah.revelationType === 'Meccan' ? 'مکی' : 'مدنی'}`;
 
-            // Full Surah audio
-            const fullAudio = document.getElementById("fullAudioPlayer");
             const fullSource = document.getElementById("fullAudioSource");
             fullSource.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${surah.number}.mp3`;
-            fullAudio.load();
+            document.getElementById("fullAudioPlayer").load();
 
-            // Ayahs
             const ayahList = document.getElementById("ayahList");
             ayahList.innerHTML = "";
-
             surah.ayahs.forEach(ayah => {
                 const card = document.createElement("div");
                 card.className = "ayah-card";
-
                 card.innerHTML = `
                     <div class="ayah-number">آیت ${ayah.numberInSurah}</div>
                     <p class="ayah-text">${ayah.text}</p>
@@ -178,7 +143,6 @@
             surahContainer.style.display = "block";
         }
 
-        // Initialize on load
         window.addEventListener("DOMContentLoaded", loadSurahList);
     </script>
 </body>
