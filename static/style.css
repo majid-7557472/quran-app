@@ -1,123 +1,118 @@
+/* Basic Reset */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Body */
 body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: linear-gradient(135deg, #0f3d2e, #145c3f);
+    font-family: Arial, sans-serif;
+    background-color: #0f3d2e;
+    color: #ffffff;
     min-height: 100vh;
-    color: #fff;
 }
 
+/* Header */
 header {
     text-align: center;
-    padding: 40px 20px 20px;
+    padding: 30px 20px 15px;
 }
 
 header h1 {
-    font-size: 2.2rem;
-    margin-bottom: 8px;
-}
-
-.subtitle {
-    opacity: 0.85;
-}
-
-main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-}
-
-.surah-form {
-    text-align: center;
-    margin: 20px 0 30px;
-}
-
-#surahSelect {
-    width: 100%;
-    max-width: 500px;
-    padding: 14px 18px;
-    border-radius: 12px;
-    border: none;
-    font-size: 1rem;
-    background: #fff;
-    color: #14392a;
-    cursor: pointer;
-}
-
-.surah-info {
-    text-align: center;
-    background: rgba(255,255,255,0.08);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.surah-info h2 {
     font-size: 2rem;
     margin-bottom: 6px;
 }
 
+/* Main content */
+main {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 0 20px 50px;
+}
+
+/* Surah dropdown */
+.surah-form {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#surahSelect {
+    width: 100%;
+    max-width: 480px;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background: #ffffff;
+    color: #0f3d2e;
+    cursor: pointer;
+}
+
+/* Surah info box */
+.surah-info {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.surah-info h2 {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+}
+
+/* Full audio player */
 .full-audio {
     background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 30px;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
 }
 
 .full-audio h3 {
-    margin-bottom: 12px;
-}
-
-.ayah-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.ayah-card {
-    background: rgba(255,255,255,0.1);
-    border-radius: 14px;
-    padding: 18px;
-}
-
-.ayah-number {
-    display: inline-block;
-    background: #d4af37;
-    color: #14392a;
-    font-weight: bold;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
     margin-bottom: 10px;
 }
 
-.ayah-text {
-    font-family: 'Traditional Arabic', 'Scheherazade New', serif;
-    font-size: 1.8rem;
-    line-height: 2.4;
-    direction: rtl;
-    text-align: right;
+/* Ayah cards */
+.ayah-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px;
     margin-bottom: 14px;
 }
 
+/* Ayah number badge */
+.ayah-number {
+    display: inline-block;
+    background: #d4af37;
+    color: #0f3d2e;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+/* Arabic text */
+.ayah-text {
+    font-size: 1.7rem;
+    line-height: 2.2;
+    direction: rtl;
+    text-align: right;
+    margin-bottom: 12px;
+}
+
+/* Audio player */
 audio {
     width: 100%;
 }
 
-.hint {
-    text-align: center;
-    opacity: 0.8;
-    margin-top: 40px;
-    font-size: 1.1rem;
-}
-
+/* Footer */
 footer {
     text-align: center;
-    padding: 20px;
-    opacity: 0.7;
+    padding: 16px;
     font-size: 0.85rem;
+    opacity: 0.65;
 }

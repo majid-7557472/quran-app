@@ -3,47 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قرآن مجید - تلاوت</title>
+    <title>قرآن مجید</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
     <header>
         <h1>📖 قرآن مجید کی تلاوت</h1>
-        <p class="subtitle">سورت منتخب کریں اور ہر آیت سنیں</p>
     </header>
 
     <main>
-        <!-- Surah select karne ke liye dropdown -->
-        <form action="" method="get" class="surah-form" id="surahForm">
-            <select name="surah_select" id="surahSelect" onchange="goToSurah()">
+        <!-- سورت منتخب کریں -->
+        <div class="surah-form">
+            <select id="surahSelect" onchange="goToSurah()">
                 <option value="">-- سورت منتخب کریں --</option>
-                {% for surah in surahs %}
-                    <option value="{{ surah.number }}"
-                        {% if selected_surah and selected_surah.number == surah.number %}selected{% endif %}>
-                        {{ surah.number }}. {{ surah.name }} ({{ surah.englishName }})
-                    </option>
+                {% for s in surahs %}
+                <option value="{{ s.number }}"
+                    {% if selected_surah and selected_surah.number == s.number %}selected{% endif %}>
+                    {{ s.number }}. {{ s.name }} ({{ s.englishName }})
+                </option>
                 {% endfor %}
             </select>
-        </form>
+        </div>
 
         {% if selected_surah %}
+
+        <!-- سورت کی معلومات -->
         <section class="surah-info">
             <h2>{{ selected_surah.name }}</h2>
             <p>{{ selected_surah.englishName }} — {{ selected_surah.englishNameTranslation }}</p>
             <p>کل آیات: {{ selected_surah.numberOfAyahs }} | نزول: {{ selected_surah.revelationType }}</p>
         </section>
 
-        <!-- Poori surah ek sath sunne ke liye -->
+        <!-- پوری سورت کا آڈیو -->
         <div class="full-audio">
             <h3>🔊 پوری سورت سنیں</h3>
             <audio controls style="width:100%">
-                <source src="https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/{{ selected_surah.number }}.mp3" type="audio/mpeg">
-                آپ کا براؤزر آڈیو سپورٹ نہیں کرتا
+                <source src="https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/{{ selected_surah.number }}.mp3">
             </audio>
         </div>
 
-        <!-- Har ayah ka alag audio player -->
+        <!-- آیات -->
         <div class="ayah-list">
             {% for ayah in ayahs %}
             <div class="ayah-card">
@@ -51,27 +51,26 @@
                 <p class="ayah-text">{{ ayah.text }}</p>
                 <audio controls>
                     <source src="{{ ayah.audio }}" type="audio/mpeg">
-                    آپ کا براؤزر آڈیو سپورٹ نہیں کرتا
                 </audio>
             </div>
             {% endfor %}
         </div>
+
         {% else %}
-        <p class="hint">تلاوت سننے کے لیے اوپر سے کوئی سورت منتخب کریں</p>
+        <p style="text-align:center; margin-top:40px;">سورت منتخب کریں تلاوت سننے کے لیے</p>
         {% endif %}
     </main>
 
     <footer>
-        <p>Powered by FastAPI &amp; alquran.cloud API</p>
+        <p>Powered by FastAPI &amp; alquran.cloud</p>
     </footer>
 
     <script>
         function goToSurah() {
             const val = document.getElementById("surahSelect").value;
-            if (val) {
-                window.location.href = "/surah/" + val;
-            }
+            if (val) window.location.href = "/surah/" + val;
         }
     </script>
+
 </body>
 </html>
